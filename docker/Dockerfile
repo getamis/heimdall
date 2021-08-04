@@ -24,8 +24,5 @@ ENV GOBIN $GOPATH/bin
 # run build
 RUN make install
 
-# add volumes
-VOLUME [ "/root/.heimdalld", "/root/logs" ]
-
 # expose ports
 EXPOSE 1317 26656 26657
