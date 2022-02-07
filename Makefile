@@ -1,3 +1,5 @@
+include main.mk
+
 # Fetch git latest tag
 LATEST_GIT_TAG:=$(shell git describe --tags $(git rev-list --tags --max-count=1))
 VERSION := $(shell echo $(shell git describe --tags) | sed 's/^v//')
@@ -170,3 +172,13 @@ release:
 		-w /go/src/$(PACKAGE_NAME) \
 		ghcr.io/troian/golang-cross:${GOLANG_CROSS_VERSION} \
 		--rm-dist --skip-validate
+
+docker.build:
+	docker build -t "$(DOCKER_IMAGE):$(DOCKER_IMAGE_TAG)" -f Dockerfile .
+	docker tag $(DOCKER_IMAGE):$(DOCKER_IMAGE_TAG) $(DOCKER_IMAGE):latest
+
+docker.push:
+	@docker push $(DOCKER_IMAGE):$(DOCKER_IMAGE_TAG)
+	@docker push $(DOCKER_IMAGE):latest
+
+.PHONY: contracts build
